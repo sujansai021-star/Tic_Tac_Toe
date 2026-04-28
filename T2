@@ -1,0 +1,33 @@
+import java.util.Random;
+
+public class TicTacToeUC2 {
+    public static void main(String[] args) {
+
+        // Step 1: Create Random object
+        Random rand = new Random();
+
+        // Step 2: Toss (0 or 1)
+        int toss = rand.nextInt(2);
+
+        // Step 3: Variables to store symbols
+        char userSymbol, computerSymbol;
+        String currentPlayer;
+
+        // Step 4: Decide who starts and assign symbols
+        if (toss == 0) {
+            currentPlayer = "User";
+            userSymbol = 'X';
+            computerSymbol = 'O';
+        } else {
+            currentPlayer = "Computer";
+            userSymbol = 'O';
+            computerSymbol = 'X';
+        }
+
+        // Step 5: Display results
+        System.out.println("Toss Result: " + (toss == 0 ? "User starts" : "Computer starts"));
+        System.out.println("User Symbol: " + userSymbol);
+        System.out.println("Computer Symbol: " + computerSymbol);
+        System.out.println("Current Turn: " + currentPlayer);
+    }
+}
