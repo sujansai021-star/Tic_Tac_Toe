@@ -1,0 +1,132 @@
+import java.util.*;
+
+public class TicTacToeUC8 {
+
+    static Scanner sc = new Scanner(System.in);
+    static Random rand = new Random();
+
+    // Print board
+    public static void printBoard(char[][] board) {
+        System.out.println();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    // Convert slot to index
+    public static int[] convertSlotToIndex(int slot) {
+        int index = slot - 1;
+        return new int[]{index / 3, index % 3};
+    }
+
+    // Validate move
+    public static boolean isValidMove(char[][] board, int r, int c) {
+        return (r >= 0 && r < 3 && c >= 0 && c < 3 && board[r][c] == '-');
+    }
+
+    // Place move
+    public static void placeMove(char[][] board, int r, int c, char sym) {
+        board[r][c] = sym;
+    }
+
+    // User move
+    public static void userMove(char[][] board, char userSymbol) {
+        int slot;
+        while (true) {
+            System.out.print("Enter slot (1-9): ");
+            slot = sc.nextInt();
+            int[] pos = convertSlotToIndex(slot);
+            if (isValidMove(board, pos[0], pos[1])) {
+                placeMove(board, pos[0], pos[1], userSymbol);
+                break;
+            } else {
+                System.out.println("Invalid move, try again.");
+            }
+        }
+    }
+
+    // Computer move (random)
+    public static void computerMove(char[][] board, char compSymbol) {
+        while (true) {
+            int slot = rand.nextInt(9) + 1;
+            int[] pos = convertSlotToIndex(slot);
+            if (isValidMove(board, pos[0], pos[1])) {
+                placeMove(board, pos[0], pos[1], compSymbol);
+                System.out.println("Computer chose slot: " + slot);
+                break;
+            }
+        }
+    }
+
+    // Check win
+    public static boolean checkWin(char[][] b, char s) {
+        for (int i = 0; i < 3; i++) {
+            if ((b[i][0] == s && b[i][1] == s && b[i][2] == s) ||
+                (b[0][i] == s && b[1][i] == s && b[2][i] == s)) {
+                return true;
+            }
+        }
+        return (b[0][0] == s && b[1][1] == s && b[2][2] == s) ||
+               (b[0][2] == s && b[1][1] == s && b[2][0] == s);
+    }
+
+    // Check draw
+    public static boolean checkDraw(char[][] b) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (b[i][j] == '-') return false;
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+
+        char[][] board = {
+            {'-', '-', '-'},
+            {'-', '-', '-'},
+            {'-', '-', '-'}
+        };
+
+        char userSymbol = 'X';
+        char compSymbol = 'O';
+        boolean userTurn = true;
+
+        System.out.println("=== Tic-Tac-Toe Game Start ===");
+
+        // 🔁 Game Loop
+        while (true) {
+
+            printBoard(board);
+
+            if (userTurn) {
+                userMove(board, userSymbol);
+                if (checkWin(board, userSymbol)) {
+                    printBoard(board);
+                    System.out.println("🎉 User Wins!");
+                    break;
+                }
+            } else {
+                computerMove(board, compSymbol);
+                if (checkWin(board, compSymbol)) {
+                    printBoard(board);
+                    System.out.println("🤖 Computer Wins!");
+                    break;
+                }
+            }
+
+            // Check draw
+            if (checkDraw(board)) {
+                printBoard(board);
+                System.out.println("It's a Draw!");
+                break;
+            }
+
+            // 🔄 Switch turn
+            userTurn = !userTurn;
+        }
+    }
+}
