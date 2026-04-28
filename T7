@@ -1,0 +1,73 @@
+import java.util.Random;
+
+public class TicTacToeUC7 {
+
+    // Convert slot (1–9) to row & column
+    public static int[] convertSlotToIndex(int slot) {
+        int index = slot - 1;
+        int row = index / 3;
+        int col = index % 3;
+        return new int[]{row, col};
+    }
+
+    // Validate move
+    public static boolean isValidMove(char[][] board, int row, int col) {
+        return (row >= 0 && row < 3 && col >= 0 && col < 3 && board[row][col] == '-');
+    }
+
+    // Place move
+    public static void placeMove(char[][] board, int row, int col, char symbol) {
+        board[row][col] = symbol;
+    }
+
+    // Print board
+    public static void printBoard(char[][] board) {
+        System.out.println("\nBoard:");
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    // Computer random move
+    public static void computerMove(char[][] board, char computerSymbol) {
+        Random rand = new Random();
+        int slot;
+        int row, col;
+
+        // Keep trying until a valid move is found
+        while (true) {
+            slot = rand.nextInt(9) + 1; // 1–9
+            int[] pos = convertSlotToIndex(slot);
+            row = pos[0];
+            col = pos[1];
+
+            if (isValidMove(board, row, col)) {
+                placeMove(board, row, col, computerSymbol);
+                System.out.println("Computer chose slot: " + slot);
+                break;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        // Initialize board
+        char[][] board = {
+            {'X', '-', '-'},
+            {'-', 'O', '-'},
+            {'-', '-', '-'}
+        };
+
+        char computerSymbol = 'X';
+
+        printBoard(board);
+
+        // Computer plays
+        computerMove(board, computerSymbol);
+
+        printBoard(board);
+    }
+}
